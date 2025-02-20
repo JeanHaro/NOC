@@ -1,3 +1,9 @@
-const names: string = 'Jean!!!';
+import { Server } from "./presentation/server";
 
-console.log('Hola mundo', names);
+( async () => {
+    main();
+})();
+
+function main() {
+    Server.start();
+}
