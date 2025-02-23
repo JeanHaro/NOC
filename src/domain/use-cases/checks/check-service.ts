@@ -3,7 +3,18 @@ interface CheckServiceUseCase {
     execute(url: string): Promise<boolean>
 }
 
+// Esto es lo que nosotros vamos a hacer si todo sale bien
+type SuccessCallBack = () => void;
+// Si hay un error
+type ErrorCallBack = (error: string) => void;
+
 export class CheckService implements CheckServiceUseCase {
+    // Inyectamos las dependencias
+    constructor (
+        private readonly successCallBack: SuccessCallBack,
+        private readonly errorCallBack: ErrorCallBack
+    ) { }
+
     // Todo lo que quiero que tenga mi caso de uso
     async execute (url: string): Promise<boolean> {
         try {
@@ -15,10 +26,13 @@ export class CheckService implements CheckServiceUseCase {
                 throw new Error(`Error on check service ${url}`);
             }
 
-            console.log(`${url} is ok`);
+            this.successCallBack();
+
             return true;
         } catch (error) {
             console.log(`${error}`);
+
+            this.errorCallBack(`${error}`);
 
             return false;
         }

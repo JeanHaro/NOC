@@ -8,7 +8,12 @@ export class Server {
         CronService.createJob(
             '*/5 * * * * *',
             () => {
-                new CheckService().execute('http://localhost:3000');
+                const url = 'http://localhost:3000'
+                // Tenemos que proporcionarle argumentos al callback
+                new CheckService(
+                    () => console.log(`${url} is ok`),
+                    (error) => console.log(error)
+                ).execute(`${url}`);
             }
         );
 
